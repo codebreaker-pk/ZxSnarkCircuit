@@ -1,0 +1,13 @@
+[
+  {
+    "name": "ZxSnark",
+    "protocol": "groth16",
+    "circuit": "ZxSnark/circuit.circom",
+    "input": "ZxSnark/input.json",
+    "wasm": "ZxSnark/out/circuit.wasm",
+    "zkey": "ZxSnark/out/ZxSnark.zkey",
+    "vkey": "ZxSnark/out/ZxSnark.vkey",
+    "r1cs": "ZxSnark/out/ZxSnark.r1cs",
+    "beacon": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
+  }
+]
