@@ -1,68 +1,56 @@
 pragma circom 2.0.0;
 
-/*This circuit template checks that c is the multiplication of a and b.*/  
-
-template ZxSnarkCircuit () {
-   
-   // signal inputs
-   signal input a;
-   signal input b;
-
-// signals from gates
-   signal x;
-   signal y;
-
-// final signal output
-   signal output q;
-
-// component gates used to create custom circuit
-
-   component andGate = AND();
-   component notgate = NOT();
-   component norGate = NOR();
-
-// circuit logic
-
-   andGate.a <== a;
-   andGate.b <== b;
-   x <== andGate.out;
-
-   notgate.in <== b;
-   y <== notgate.out;
-
-   norGate.x <== x;
-   norGate.y <== y;
-   q <== norGate.out;
-
-}
-// template for AND
-
-    template AND() {
+template AND() {
     signal input a;
     signal input b;
     signal output out;
 
-    out <== a*b;
+    out <== a * b;// AND gate: Output is 1 if both inputs are 1, otherwise 0
 }
-// template for NOT
 
-    template NOT() {
+template OR() {
+    signal input a;
+    signal input b;
+    signal output out;
+
+    out <== a + b - a * b;// OR gate: Output is 1 if at least one input is 1, otherwise 0
+}
+
+template NOT() {
     signal input in;
     signal output out;
 
-    out <== 1 + in - 2*in;
-}
-// template for NOR
-
-    template NOR() {
-    signal input x;
-    signal input y;
-    signal output out;
-
-    out <== x*y + 1 - x - y;
-  
-
-    
+    out <== 1 + in - 2 * in;// NOT gate: Output is the negation of the input (1 if input is 0, and 0 if input is 1)
 }
 
-component main = ZxSnarkCircuit();
+template ZxSnarkCircuit () {
+    // Input signals
+    signal input a;
+    signal input b;
+
+    // Intermediate signals
+    signal x; // Intermediate signal to store orGate1's output
+    signal y; // Intermediate signal to store notGate1's output
+
+    // Output signal
+    signal output q; // Final output signal
+
+    // Create gates
+    component andGate = AND();
+    component notGate = NOT();
+    component orGate = OR();
+
+    // Connect circuit logic
+    andGate.a <== a;
+    andGate.b <== b;
+    x <== andGate.out; //Stores andGate output in 'x'
+
+    notGate.in <== b;
+    y <== notGate.out; //Stores notGate output in 'y'
+
+    orGate.a <== x;
+    orGate.b <== y;
+    q <== orGate.out * notGate.out; //Stores orGate output in 'q'
+}
+
+component main = ZxSnarkCircuit(); // Instantiate the ZxSnarkCircuit circuit
